@@ -1,0 +1,42 @@
+---
+title: "gdpplot"
+output: pdf_document
+---
+
+```{r setup, echo=FALSE, warning=FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+library(tidyverse)
+library(readr)
+library(ggplot2)
+library(scales)
+
+gdp <- read_csv("GDP_UK.csv")
+```
+
+
+## Including Plots
+
+
+```{r}
+
+gdpplot <- ggplot(gdp, aes(x = DATE, y = NGDPMPUKA)) +
+  geom_histogram(stat="identity", fill = "deepskyblue2",color="white") +
+  theme_bw()  +
+  labs (title = "Nominal GDP in UK",
+        subtitle="1900-1950",
+        y = " Nominal GDP (millions of pounds)", x = "Year",
+        caption = "Source: Bank of England") +
+   
+scale_x_date(date_breaks = "5 years", 
+               date_labels = "%Y", 
+               limits=c(as.Date("1898-01-01"), as.Date("1952-01-01")))+
+  
+scale_y_continuous(limits = c(0,15000))
+  
+
+print(gdpplot)
+```
+rlang::last_error()
+
+

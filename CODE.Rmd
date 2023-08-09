@@ -1,0 +1,72 @@
+---
+output:
+  html_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r}
+library(tidyverse)
+library(readr)
+library(ggplot2)
+library(scales)
+
+BOEPRUKA <- read_csv("BOEPRUKA.csv")
+
+ggplot(BOEPRUKA, aes(x = DATE, y = BOEPRUKA)) +
+  geom_line(color = "darkblue", size=1) +
+  geom_point(color="darkblue") +
+  scale_x_date(limits = c(as.Date("1893-01-01"), as.Date("1950-01-01")),
+               date_breaks = "10 year", date_labels = "%Y") + 
+  scale_y_continuous(limits = c(0,7), labels = function(x) paste0(x, "%")) +
+  theme_bw() +
+  labs(title = "UK interest rates from 1900 to 1950",
+       y = "Interest rate (%)", x = "Year",
+       caption = "Source:Federal Reserve Bank of St.Louis")
+```
+
+```{r}
+CPIUKA<-read.csv("CPIUKA .csv",header=T)
+
+str(CPIUKA)
+
+qplot(as.POSIXlt(DATE)$year+1900,CPIUKA,data=CPIUKA,geom=("point"),xlab="Year"
+
+,ylab="CPI(%)",main="CPI in UK from 1900 to 1950")+labs(caption="Source:Federal Reserve Bank of St.Louis")
+
+
+```
+
+
+```{r}
+UNRTUKA<-read.csv("UNRTUKA.csv",header=T,colClasses=c("factor","character"))
+
+str(UNRTUKA)
+
+UNRTUKA$Unemployment_Rate<-as.numeric(substr(UNRTUKA$Unemployment_Rate,1,nchar(UNRTUKA$Unemployment_Rate)-1))
+
+qplot(as.POSIXlt(UNRTUKA[,1])$year+1900,UNRTUKA$Unemployment_Rate,geom=("line"),xlab="Year"
+
+,ylab="Unemployment Rate(%)",main="Unemployment Rate in UK from 1900 to 1950")+labs(caption="Source:Federal Reserve Bank of St.Louis")
+
+```
+
+```{r}
+gdpplot <- ggplot(gdp, aes(x = DATE, y = NGDPMPUKA)) +
+  geom_histogram(stat="identity", fill = "deepskyblue2",color="white") +
+  theme_bw()  +
+  labs (title = "Nominal GDP in UK",
+        subtitle="1900-1950",
+        y = " Nominal GDP (millions of pounds)", x = "Year",
+        caption = "Source: Bank of England") +
+   
+scale_x_date(date_breaks = "5 years", 
+               date_labels = "%Y", 
+               limits=c(as.Date("1898-01-01"), as.Date("1952-01-01")))+
+  
+scale_y_continuous(limits = c(0,15000))
+  
+print(gdpplot)
+```
